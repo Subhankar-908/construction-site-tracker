@@ -1,0 +1,5 @@
+"use client";
+import {useState} from "react";import {useRouter} from "next/navigation";import LayoutShell from "../../components/LayoutShell";import {api} from "../../lib/api";
+export default function Create(){const [f,setF]=useState({name:"",location:"",clientName:"",status:"PLANNING"}),r=useRouter(),[e,setE]=useState("");
+async function submit(x){x.preventDefault();try{await api("/projects",{method:"POST",body:JSON.stringify(f)});r.push("/projects")}catch(e){setE(e.message)}}
+return <LayoutShell title="Create Project"><form className="panel form" onSubmit={submit}><label>Project Name</label><input required value={f.name} onChange={e=>setF({...f,name:e.target.value})}/><label>Location</label><input value={f.location} onChange={e=>setF({...f,location:e.target.value})}/><label>Client Name</label><input value={f.clientName} onChange={e=>setF({...f,clientName:e.target.value})}/><label>Status</label><select value={f.status} onChange={e=>setF({...f,status:e.target.value})}><option>PLANNING</option><option>ONGOING</option><option>ON_HOLD</option></select>{e&&<div className="error">{e}</div>}<button className="primary">Create Project</button></form></LayoutShell>}

@@ -1,0 +1,4 @@
+"use client";
+import {useEffect,useState} from "react";import LayoutShell from "../components/LayoutShell";import {api} from "../lib/api";
+export default function Materials(){const [items,setItems]=useState([]);useEffect(()=>{api("/materials").then(d=>setItems(d.materials)).catch(console.error)},[]);
+return <LayoutShell title="Material Consumption"><div className="panel table-wrap"><table><thead><tr><th>Material</th><th>Project</th><th>Planned</th><th>Stock</th><th>Minimum</th><th>Status</th></tr></thead><tbody>{items.map(m=><tr key={m._id}><td>{m.name}</td><td>{m.project?.name}</td><td>{m.plannedQuantity} {m.unit}</td><td>{m.currentStock}</td><td>{m.minimumStock}</td><td>{m.currentStock<=m.minimumStock?<span className="badge danger">LOW STOCK</span>:<span className="badge good">OK</span>}</td></tr>)}</tbody></table></div></LayoutShell>}

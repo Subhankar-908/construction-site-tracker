@@ -1,0 +1,5 @@
+"use client";
+import {useEffect,useState} from "react";import LayoutShell from "../components/LayoutShell";import {api} from "../lib/api";
+export default function Reviews(){const [logs,setLogs]=useState([]);async function load(){setLogs((await api("/daily-logs?status=SUBMITTED")).logs)}useEffect(()=>{load()},[]);
+async function review(id,action){const comment=prompt("Comment")||"";await api(`/daily-logs/${id}/review`,{method:"PATCH",body:JSON.stringify({action,comment})});load()}
+return <LayoutShell title="Manager Review"><div className="panel table-wrap"><table><thead><tr><th>Date</th><th>Project</th><th>Supervisor</th><th>Progress</th><th>Action</th></tr></thead><tbody>{logs.map(l=><tr key={l._id}><td>{new Date(l.date).toLocaleDateString()}</td><td>{l.project?.name}</td><td>{l.supervisor?.name}</td><td>{l.overallProgress}%</td><td><button className="small good-btn" onClick={()=>review(l._id,"APPROVED")}>Approve</button> <button className="small danger-btn" onClick={()=>review(l._id,"REJECTED")}>Reject</button></td></tr>)}</tbody></table></div></LayoutShell>}
