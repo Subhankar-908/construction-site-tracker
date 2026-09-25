@@ -1,1 +1,0 @@
-close.log("hello");
